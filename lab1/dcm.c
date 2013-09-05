@@ -19,7 +19,7 @@
 int8_t lcd_buffer[17];	// LCD display buffer
 const int8_t LCD_initialize[] PROGMEM = "LCD Initialized\0";
 const int8_t LCD_number[] PROGMEM = "Cap=\0";
-uint8_t anipos, dir;	// move a character around  
+uint8_t anipos, dir, count;	// move a character around  
 uint16_t LCD_capacitance;
 
 // timeout counter for task1
@@ -39,14 +39,13 @@ void initialize(void); // Set up the MCU
 int main(void)
 {
 	initialize();
-	if (time1==0){time1=t1;	task1();}
-
+	while(1){if (time1==0){time1=t1; task1();}}		
 }
-void blinkLEDs(void); // Blink some LEDs for testing
+
 void task1(void)
 {
-	DDRB=(0<<DDB3);	// Port b.3 is an input and port b.2
-	DDRB=(1<<DDB2); // is an output
+	DDRB=(0<<DDB3);	// Port b.3 is an input
+	DDRB=(1<<DDB2); // and port b.2 is an output
 	
 	//Compute Capacitance
 	capacitance = T1capture;///(11207.4); //amount of time for charging capacitance to comparator switch
@@ -56,37 +55,50 @@ void task1(void)
 	LCDGotoXY(4, 0);
   	// display the count 
 	LCDstring(lcd_buffer, strlen(lcd_buffer));	
-	CopyStringtoLCD(LCD_capacitance, 0, 0);
 
 	DDRB=(0<<DDB2); // Set port b.2 input to charge cap
 }
 void initialize(void) 
 {
-	TCCR0A = (1<<WGM01);	          // Set WGM bits to 010 to set desired mode (CTC mode, pg. 106)
+	TCCR0A = (1<<WGM01);	      // Set WGM bits to 010 to set desired mode (CTC mode, pg. 106)
 	TCCR0B = (1<<CS01)|(1<<CS00); // Bits 0 and 1. Set timer 0 prescaler to 64
 	TIMSK0 = (1<<OCIE0A); 		  // Bit 1: Enable compare match for timer0 interrupts
 	OCR0A = 249;				  // Set the compare register to 250 time ticks
 	
 	// Set up timer1 for full speed
 	TCCR1B = (1<<ICES1)|(1<<CS00);  // Set capture to positive edge, and set timer1 for full speed
-	TIMSK1 = (1<<ICIE1);                    // Turn on timer1 interrupt-on-capture
+	TIMSK1 = (1<<ICIE1);            // Turn on timer1 interrupt-on-capture
 
-	ACSR = (1<<ACIC) ; // Set analog comp to connect to timer capture input
-	DDRB = 0;          // Comparator negative input is B.3
+
+	ACSR = (1<<ACIC) ; 			// Set analog comp to connect to timer capture input
+	DDRB = ~DDB3;          			// Comparator negative input is B.3
 
 	//LCD init
 	init_lcd();
 	LCDclr();
+
+	CopyStringtoLCD(LCD_number, 0, 0);
+	T1capture = 0;
+
+	//set up the ports
+  	DDRD |= 0x04;  // and d.2 which runs another LED
+	sei();
 }
 
 void init_lcd(void) 
 {
-	LCDinit();	//initialize the display
+	LCDinit();				//initialize the display
 	LCDcursorOFF();
 	LCDclr();				//clear the display
 	LCDGotoXY(0,0);
 	CopyStringtoLCD(LCD_initialize, 0, 0);
-}	
+}
+
+void blinkLED(void) 
+{
+	// blink the onboard LED
+	PORTD = 0x00;
+}
 
 //Timer 0 overflow ISR
 ISR (TIMER0_COMPA_vect) 
@@ -97,5 +109,5 @@ ISR (TIMER0_COMPA_vect)
 ISR (TIMER1_CAPT_vect) 
 {
 	T1capture = ICR1;
-
+	blinkLED();
 } 
