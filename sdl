@@ -1,0 +1,63 @@
+[33mcommit 2d37db400310165ab39ae6f10dd50de8b534d5af[m
+Merge: fef4be1 874c031
+Author: michaelwangco <msw234@cornell.edu>
+Date:   Thu Sep 5 04:47:27 2013 +0100
+
+    Merge branch 'master' of https://github.com/michaelwangco/ece4760
+
+[33mcommit fef4be199befa97e6f565937ce14c006bd38a014[m
+Author: michaelwangco <msw234@cornell.edu>
+Date:   Thu Sep 5 04:46:03 2013 +0100
+
+    added textjohn file
+
+[33mcommit 874c0313004873613a1184554d0780fc54244462[m
+Author: Pikafu <sf323@cornell.edu>
+Date:   Wed Sep 4 23:40:35 2013 -0400
+
+    Added lab1 files.
+
+[33mcommit 4728ff4a89ad59c3615f75441687e84c69082374[m
+Author: Pikafu <sf323@cornell.edu>
+Date:   Wed Sep 4 23:34:12 2013 -0400
+
+    Testing commit to master repo.
+
+[33mcommit ad7e48af8eb330b95386fe8e2530d6ec1e0ca044[m
+Author: Pikafu <sf323@cornell.edu>
+Date:   Wed Sep 4 23:06:38 2013 -0400
+
+    Add Test.txt
+
+[33mcommit 31a765bed7aa45e77676ec13445b279d30d78ebd[m
+Author: Michael Wang <msw234@cornel.edu>
+Date:   Wed Sep 4 22:55:28 2013 -0400
+
+    THIS GUI IS AWESOME!
+
+[33mcommit 4396a5b16796f4d41e2b413b08a9460ec87f0b7e[m
+Merge: 39c2ac9 735997a
+Author: Michael Wang <michael.wang.co@gmail.com>
+Date:   Wed Sep 4 19:45:48 2013 -0700
+
+    Merge pull request #1 from Pikafu/master
+    
+    Added party
+
+[33mcommit 735997a9e70e553bca57e870908ee522de94a6c1[m
+Author: Pikafu <sf323@cornell.edu>
+Date:   Wed Sep 4 22:42:43 2013 -0400
+
+    Added party
+
+[33mcommit 39c2ac9e616c85d1f5958a8119efcf245104d41d[m
+Author: Michael Wang <michael.wang.co@gmail.com>
+Date:   Wed Sep 4 22:37:28 2013 -0400
+
+    Update README.md
+
+[33mcommit fdfbae878c435c57f7e78a796cfcb2e6a07ca7c5[m
+Author: Michael Wang <michael.wang.co@gmail.com>
+Date:   Wed Sep 4 19:35:26 2013 -0700
+
+    Initial commit
