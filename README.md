@@ -16,3 +16,5 @@ Lab 4: Motor controller and tachometer
 Lab 5: Design Project
 
 Lab 6: Party
+
+Lab 7: Party again
