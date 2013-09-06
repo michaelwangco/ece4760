@@ -47,15 +47,17 @@ void task1(void)
 	DDRB=(0<<DDB3);	// Port b.3 is an input
 	DDRB=(1<<DDB2); // and port b.2 is an output
 	
-	//Compute Capacitance
-	capacitance = T1capture;///(11207.4); //amount of time for charging capacitance to comparator switch
-									  // Assuming R3/R3 + R4 ratio is 0.6 and the capicitance is between 1 nF and 100 nF
-	//Update LCD	
-	sprintf(lcd_buffer,"%-i",capacitance);
-	LCDGotoXY(4, 0);
-  	// display the count 
-	LCDstring(lcd_buffer, strlen(lcd_buffer));	
-
+	if (T1capture > 100)
+	{
+		//Compute Capacitance
+		capacitance = (int)T1capture/(11207); //amount of time for charging capacitance to comparator switch
+										  // Assuming R3/R3 + R4 ratio is 0.6 and the capicitance is between 1 nF and 100 nF
+		//Update LCD	
+		sprintf(lcd_buffer,"%-u",capacitance);
+		LCDGotoXY(4, 0);
+	  	// display the count 
+		LCDstring(lcd_buffer, strlen(lcd_buffer));	
+	}
 	DDRB=(0<<DDB2); // Set port b.2 input to charge cap
 }
 void initialize(void) 
@@ -71,7 +73,8 @@ void initialize(void)
 
 
 	ACSR = (1<<ACIC) ; 			// Set analog comp to connect to timer capture input
-	DDRB = ~DDB3;          			// Comparator negative input is B.3
+	TIFR1 = (1<<ICF1);
+	DDRB = 0;          			// Comparator negative input is B.3
 
 	//LCD init
 	init_lcd();
@@ -97,7 +100,7 @@ void init_lcd(void)
 void blinkLED(void) 
 {
 	// blink the onboard LED
-	PORTD = 0x00;
+	PORTD ^= 0x04;
 }
 
 //Timer 0 overflow ISR
@@ -108,6 +111,7 @@ ISR (TIMER0_COMPA_vect)
 //Timer 1 capture ISR
 ISR (TIMER1_CAPT_vect) 
 {
-	T1capture = ICR1;
 	blinkLED();
-} 
+	T1capture = ICR1;
+	
+}
