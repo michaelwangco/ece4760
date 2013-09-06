@@ -138,7 +138,7 @@ begin
   PORTB=0;
   DDRD=0x02;	// PORT D is an input except for UART on D.1
   DDRD |= 0x04;  // and d.2 which runs another LED
-  PORTD = 0xc0;  // turn on pullups on d.6 and d.7 for pushbuttons
+  PORTD = 0xc;  // turn on pullups on d.6 and d.7 for pushbuttons
        
   //set up timer 0 for 1 mSec timebase 
   TIMSK0= (1<<OCIE0A);	//turn on timer 0 cmp match ISR 

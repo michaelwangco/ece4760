@@ -21,6 +21,7 @@
  *	13 D6 -	PC6
  *	14 D7 -	PC7 
  */
+#define F_CPU 16000000UL
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
@@ -85,7 +86,7 @@ begin
   anipos=anipos+dir;
   LCDGotoXY(anipos,1);	   //second line
   LCDsendChar('o');
-end
+end	
 
 //**********************************************************       
 //Entry point and task scheduler loop
