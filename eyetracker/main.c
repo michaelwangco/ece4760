@@ -19,6 +19,11 @@
 // Don't mess with the semaphores
 #define SEM_RX_ISR_SIGNAL 1
 #define SEM_STRING_DONE 2 // user hit <enter>
+
+#define ITG3200W 0xD2
+#define ITG3200R 0xD3
+#define Address 0x00
+
 #include "trtUart.h"
 #include "trtUart.c"
 // UART file descriptor
@@ -49,9 +54,9 @@ void gyro(void)
 {
 	char data;
 	int i;
-	unsigned char address = 0x00; //
-	unsigned char ITG3200R = 0xD3; //Possibly 0x68 => D1
-	unsigned char ITG3200W = 0xD2; //Possibly 0x68 => D0
+	//unsigned char address = 0x00; //
+	//unsigned char ITG3200R = 0xD3; //Possibly 0x68 => D1
+	//unsigned char ITG3200W = 0xD2; //Possibly 0x68 => D0
 	while (1)
 	{
 		printf("Starting\n");
@@ -65,52 +70,53 @@ void gyro(void)
 
 		printf("start sent\n");
 		//Wait
-		while (!(TWCR & (1<<TWINT)) && (i < 1000))
-		{i++;}
-		i = 0;
+		while (!(TWCR & (1<<TWINT)));// && (i < 1000))
+		//{i++;}
+		//i = 0;
 
 		//Send gyro write
 		TWDR = ITG3200W;
 		TWCR = (1<<TWINT)|(1<<TWEN);
 
-		printf("sent gyro write");
+		printf("sent gyro write:, %x and prac, %x\n", TWDR, ITG3200W);
 		//Wait
-		while (!(TWCR & (1<<TWINT)) && (i < 1000)){ i++; }
-		i = 0;
+		while (!(TWCR & (1<<TWINT)));// && (i < 1000)){ i++; }
+		//i = 0;
 
 		//Send gyro address
-		TWDR = address;
+		TWDR = Address;
 		TWCR = (1<<TWINT)|(1<<TWEN);
 
-		printf("sent gyro address");
+		printf("sent gyro address:, %x\n", TWDR);
 		//Wait
-		while (!(TWCR & (1<<TWINT)) && (i < 1000)){ i++; }
-		i = 0;
+		while (!(TWCR & (1<<TWINT)));// && (i < 1000)){ i++; }
+		//i = 0;
 
 		//Send Start
 		TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN);
+		while (!(TWCR & (1<<TWINT)));
 
 		//Send gyro read
 		TWDR = ITG3200R;
 		TWCR = (1<<TWINT)|(1<<TWEN);
-		printf("start sent and gyro read sent");
+		printf("start sent and gyro read sent:, %x\n", TWDR);
 		//Wait
-		while (!(TWCR & (1<<TWINT)) && (i < 1000)){ i++; }
-		i = 0;
-
+		while (!(TWCR & (1<<TWINT)));// && (i < 1000)){ i++; }
+		//i = 0;
+		printf("received data, about to send ack, %x\n", TWDR);
 		//Receive data, Send ack/nack
-		TWCR = TWCR & 0x0F | (1<<TWINT) | (1<<TWEA);
+		TWCR = (TWCR & 0x0F) | (1<<TWINT) | (1<<TWEA);
 
-		printf("sent ack/nack");
+		printf("sent ack/nack:, %x\n", TWDR);
 		//Wait
-		while (!(TWCR & (1<<TWINT)) && (i < 1000)){ i++; }
-		i = 0;
+		while (!(TWCR & (1<<TWINT)));// && (i < 1000)){ i++; }
+		//i = 0;
 
 		//Get Data
 		data = TWDR;
-		printf("waiting for data");
+		printf("waiting for data:, %x\n", TWDR);
 		//Wait
-		while (!(TWCR & (1<<TWINT)) && (i < 1000)){ i++; }
+		while (!(TWCR & (1<<TWINT)));// && (i < 1000)){ i++; }
 		i = 0;
 
 		// STOP
