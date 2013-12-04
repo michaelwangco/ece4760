@@ -31,16 +31,11 @@ volatile unsigned int T1capture;
 // Capacitance in nF
 volatile unsigned int capacitance;
 
-
-
-void initialize(void); // Set up the MCU
-
-
-int main(void)
-{
-	initialize();
-	while(1){if (time1==0){time1=t1; task1();}}		
-}
+//Function Prototypes
+void task1(void);
+void init_lcd(void);
+void initialize(void);
+void blinkLED(void);
 
 void task1(void)
 {
@@ -57,6 +52,15 @@ void task1(void)
 	LCDstring(lcd_buffer, strlen(lcd_buffer));	
 
 	DDRB=(0<<DDB2); // Set port b.2 input to charge cap
+}
+
+void init_lcd(void) 
+{
+	LCDinit();				//initialize the display
+	LCDcursorOFF();
+	LCDclr();				//clear the display
+	LCDGotoXY(0,0);
+	CopyStringtoLCD(LCD_initialize, 0, 0);
 }
 void initialize(void) 
 {
@@ -85,15 +89,6 @@ void initialize(void)
 	sei();
 }
 
-void init_lcd(void) 
-{
-	LCDinit();				//initialize the display
-	LCDcursorOFF();
-	LCDclr();				//clear the display
-	LCDGotoXY(0,0);
-	CopyStringtoLCD(LCD_initialize, 0, 0);
-}
-
 void blinkLED(void) 
 {
 	// blink the onboard LED
@@ -111,3 +106,8 @@ ISR (TIMER1_CAPT_vect)
 	T1capture = ICR1;
 	blinkLED();
 } 
+int main(void)
+{
+	initialize();
+	while(1){if (time1==0){time1=t1; task1();}}		
+}
